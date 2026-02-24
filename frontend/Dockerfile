@@ -1,29 +1,11 @@
-# Stage 1: Build Angular App
-FROM node:16.20.0 AS build
-
-WORKDIR /app
-
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copy the rest of the code and build
-COPY . .
-RUN npm run build --prod
-
-# Stage 2: Serve built files with a lightweight static server
+# Stage 1: build the Angular app
 FROM node:16.20.0
-
+ENV GENERATE_SOURCEMAP=false
 WORKDIR /app
+COPY package.json package-lock.json ./
+COPY . .
+RUN npm install
+RUN npm run build
 
-# Install serve globally
-RUN npm install -g serve
-
-# Copy build output from previous stage
-COPY --from=build /app/dist /app/dist
-
-# Expose port for container
-EXPOSE 8081
-
-# Start the static server
-CMD ["serve", "-s", "dist", "-l", "8081"]
+# Stage 2: serve using built-in Angular dev server
+CMD ["npx", "serve", "-s", "dist/<project-name>", "-l", "8081"]
