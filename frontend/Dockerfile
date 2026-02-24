@@ -1,5 +1,5 @@
 # Stage: Angular dev container
-FROM node:16.20.0
+FROM node:20.9.1
 
 WORKDIR /app
 
