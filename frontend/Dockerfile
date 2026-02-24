@@ -1,18 +1,29 @@
-# Use Node 20 (Angular 15 compatible)
-FROM node:20
+# Stage 1: Build Angular App
+FROM node:16.20.0 AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and install dependencies
 COPY package.json package-lock.json ./
+RUN npm install
 
-# Install dependencies
-RUN npm install @types/node@18 typescript@4.9
+# Copy the rest of the code and build
 COPY . .
+RUN npm run build --prod
 
-# Expose Angular dev server port
+# Stage 2: Serve built files with a lightweight static server
+FROM node:16.20.0
+
+WORKDIR /app
+
+# Install serve globally
+RUN npm install -g serve
+
+# Copy build output from previous stage
+COPY --from=build /app/dist /app/dist
+
+# Expose port for container
 EXPOSE 8081
 
-# Run Angular dev server
-CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--port", "8081"]
+# Start the static server
+CMD ["serve", "-s", "dist", "-l", "8081"]
