@@ -8,4 +8,4 @@ RUN npm install
 RUN npm run build
 
 # Stage 2: serve using built-in Angular dev server
-CMD ["npx", "serve", "-s", "dist/<project-name>", "-l", "8081"]
+CMD ["npx", "serve", "-s", "dist/frontend", "-l", "8081"]
