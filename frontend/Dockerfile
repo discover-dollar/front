@@ -1,5 +1,5 @@
 # Use Node 20 (Angular 15 compatible)
-FROM node:20.9.1
+FROM node:20
 
 # Set working directory
 WORKDIR /app
