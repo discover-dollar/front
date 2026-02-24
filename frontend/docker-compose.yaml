@@ -1,19 +1,16 @@
-version: '3'
+version: '3.9'
+
 services:
-    frontend:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: frontend
-        ports:
-               - "80:80"
-        volumes:
-                  - /var/application/nginx/log:/var/log/nginx
-                  - /var/application/nginx/cache:/var/cache/nginx
-                  - /var/application/nginx/run:/var/run
-        restart: always
-        networks:
-            - dd_network
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "8081:8081"   # Map container port to host
+    restart: always
+    networks:
+      - dd_network
 
 networks:
   dd_network:
